@@ -1,0 +1,39 @@
+#ifndef SM_TIM1_PLUSE_H
+#define SM_TIM1_PLUSE_H
+
+#include "Sm_TIM1.h"
+#include "Sm_Pluse.h"
+#include "Sm_GPIOA.h"
+
+//方向信号
+#define TIM1_PLUSE_DIRECTION_CLASS      Sm_GPIOA
+#define TIM1_PLUSE_DIRECTION_PIN        GPIO_Pin_9
+
+//原点信号
+#define TIM1_PLUSE_HOME_CLASS           Sm_GPIOA
+#define TIM1_PLUSE_HOME_PIN             GPIO_Pin_10
+#define TIM1_PLUSE_HOME_PINSOURCE       GPIO_PinSource10
+
+//正限位信号
+#define TIM1_PLUSE_FORWARDLIMIT_CLASS   Sm_GPIOA
+#define TIM1_PLUSE_FORWARDLIMIT_PIN     GPIO_Pin_11
+
+//负限位信号
+#define TIM1_PLUSE_REVERSELIMIT_CLASS   Sm_GPIOA
+#define TIM1_PLUSE_REVERSELIMIT_PIN     GPIO_Pin_12
+
+//TIM1 CR1寄存器
+#define TIM1_CR1_ADDR 0x40012c00
+
+extern Sm::Pluse_t                      TIM1_Pluse;
+
+//脉冲输出：GPIO PA8
+typedef Sm_Pluse<Sm_TIM1, Sm::PWM_Channel1, TIM1_CR1_ADDR,
+        RCC_AHBPeriph_DMA1, DMA1_Channel5_BASE, DMA1_Channel5_IRQn,
+        TIM1_PLUSE_DIRECTION_CLASS, TIM1_PLUSE_DIRECTION_PIN,
+        TIM1_PLUSE_HOME_CLASS, TIM1_PLUSE_HOME_PINSOURCE,
+        TIM1_PLUSE_FORWARDLIMIT_CLASS, TIM1_PLUSE_FORWARDLIMIT_PIN,
+        TIM1_PLUSE_REVERSELIMIT_CLASS, TIM1_PLUSE_REVERSELIMIT_PIN,
+        &TIM1_Pluse> Sm_TIM1_Pluse;
+
+#endif
