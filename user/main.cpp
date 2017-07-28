@@ -173,12 +173,12 @@ int main(int argc, char* argv[])
 
     Sm_SysTick::setCLKSource(SysTick_CLKSource_HCLK_Div8);
 
-    // Sm_Debug("...Is Running...\n");
+    Sm_Debug("...Is Running...\n");
 
     //设置4个抢断优先级和4个响应优先级
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
-    // LED_Init();
+    LED_Init();
     // led1Off(); //LED1灭
     // led2Off(); //LED2灭
     // Key_Init(); //初始化上、下、左、右4个按键
@@ -384,18 +384,13 @@ int main(int argc, char* argv[])
      * PEout(5) = 1;
      */
 
-    Sm_GPIOB::init_IO(GPIO_Pin_5);
-    Sm_GPIOE::init_IO(GPIO_Pin_5);
     while(1)
     {
         // Sm_SysTick::delay_ms(1000);
         // Sm_Debug("%d %d %d %d %d %d\n", adc_buff[11], adc_buff[12], adc_buff[13], adc_buff[14], adc_buff[15], adc_buff[16]);
         delay_ms(1);
-        Sm_GPIOB::setBits(GPIO_Pin_5);
-        Sm_GPIOE::setBits(GPIO_Pin_5);
-        delay_ms(1);
-        Sm_GPIOB::resetBits(GPIO_Pin_5);
-        Sm_GPIOE::resetBits(GPIO_Pin_5);
+        Sm_GPIOB::toggleOutputBit(GPIO_Pin_5);
+        Sm_GPIOE::toggleOutputBit(GPIO_Pin_5);
     }
 
     return 0;

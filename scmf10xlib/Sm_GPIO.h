@@ -134,7 +134,7 @@ inline void GPIO_CLASS::writeBit(uint16_t GPIO_Pin_x, BitAction bitaction)
 template<GPIO_TEMPLATE_PARAMETER>
 inline void GPIO_CLASS::toggleOutputBit(uint16_t GPIO_Pin_x)
 {
-    readOutputDataBit(GPIO_Pin_x) ? resetBits(GPIO_Pin_x) : setBits(GPIO_Pin_x);
+    GPIOx()->ODR ^= GPIO_Pin_x;
 }
 
 template<GPIO_TEMPLATE_PARAMETER>
