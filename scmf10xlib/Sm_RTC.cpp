@@ -2,11 +2,8 @@
 #include "Sm_SysTick.h"
 #include "Sm_Debug.h"
 
-Sm::SmCallback RTC_SecTimeout_Callback;
-void *RTC_SecTimeout_Arg;
-
-Sm::SmCallback RTC_Alarm_Callback;
-void *RTC_Alarm_Arg;
+static Sm::CALLBACK Second_Callback;
+static Sm::CALLBACK Alarm_Callback;
 
 /*
 ********************************************************************************
@@ -29,14 +26,16 @@ extern "C" void RTC_IRQHandler(void)
 
     if(RTC_GetITStatus(RTC_IT_SEC) != RESET)    //秒中断
     {
-        RTC_SecTimeout_Callback(RTC_SecTimeout_Arg);
+        if(Second_Callback.pfun != NULL)
+            Second_Callback.pfun(Second_Callback.arg);
         RTC_ClearITPendingBit(RTC_IT_SEC|RTC_IT_OW);
     }
 
     if(RTC_GetITStatus(RTC_IT_ALR) != RESET)    //闹钟中断
     {
         RTC_ClearITPendingBit(RTC_IT_ALR);
-        RTC_Alarm_Callback(RTC_Alarm_Arg);
+        if(Alarm_Callback.pfun != NULL)
+            Alarm_Callback.pfun(Alarm_Callback.arg);
     }
 
 #ifdef Sm_UCOS_Support 
@@ -219,10 +218,10 @@ void Sm_RTC::secondITConfig(FunctionalState NewState)
     RTC_WaitForLastTask();
 }
 
-void Sm_RTC::setSecCallback(Sm::SmCallback process, void *arg)
+void Sm_RTC::setSecCallback(void (*pfun)(void *), void *arg)
 {
-    RTC_SecTimeout_Callback = process;
-    RTC_SecTimeout_Arg = arg;    
+    Second_Callback.pfun = pfun;
+    Second_Callback.arg = arg;
 }
 
 void Sm_RTC::alarmITConfig(FunctionalState state)
@@ -231,9 +230,9 @@ void Sm_RTC::alarmITConfig(FunctionalState state)
     RTC_WaitForLastTask();
 }
 
-void Sm_RTC::setAlarmCallback(Sm::SmCallback process, void *arg)
+void Sm_RTC::setAlarmCallback(void (*pfun)(void *), void *arg)
 {
-    RTC_Alarm_Callback = process;
-    RTC_Alarm_Arg = arg;    
+    Alarm_Callback.pfun = pfun;
+    Alarm_Callback.arg = arg;
 }
 

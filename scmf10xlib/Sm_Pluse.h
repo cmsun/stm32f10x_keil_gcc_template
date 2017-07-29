@@ -500,7 +500,7 @@ public:
         //开启DMA传输完成中断
         DMA_ITConfig((DMA_Channel_TypeDef *)DMAx_Channely, DMA_IT_TC, ENABLE);
         //定时器更新时产生DMA请求
-        TIM_DMACmd(Sm_TIMx::mTIMx, TIM_DMA_Update, ENABLE);
+        TIM_DMACmd(Sm_TIMx::TIMx(), TIM_DMA_Update, ENABLE);
 
         //初始化方向信号
         Sm_GPIO_Direction::init_IO(GPIO_Pin_Direction);
@@ -519,10 +519,10 @@ public:
     {
         Sm::Step_t &step = Pluse->Step.front();
 
-        Sm_TIMx::mTIMx->PSC = step.PSC;
-        Sm_TIMx::mTIMx->ARR = step.ARR;
-        Sm_TIMx::mTIMx->CCR1 = step.CCR;
-        Sm_TIMx::mTIMx->EGR |= TIM_EGR_UG;
+        Sm_TIMx::TIMx()->PSC = step.PSC;
+        Sm_TIMx::TIMx()->ARR = step.ARR;
+        Sm_TIMx::TIMx()->CCR1 = step.CCR;
+        Sm_TIMx::TIMx()->EGR |= TIM_EGR_UG;
 
         ((DMA_Channel_TypeDef *)DMAx_Channely)->CMAR = (uint32_t)Pluse->DMABuff;
         ((DMA_Channel_TypeDef *)DMAx_Channely)->CCR &= (uint16_t)(~DMA_CCR1_EN);    //关闭DMA通道
@@ -551,13 +551,13 @@ public:
 
     static int32_t getVelocity(void)
     {
-        uint16_t PSC = Sm_TIMx::mTIMx->PSC;
-        uint16_t ARR = Sm_TIMx::mTIMx->ARR;
-        uint16_t CCRx = (&Sm_TIMx::mTIMx->CCR1)[2*channel];
+        uint16_t PSC = Sm_TIMx::TIMx()->PSC;
+        uint16_t ARR = Sm_TIMx::TIMx()->ARR;
+        uint16_t CCRx = (&Sm_TIMx::TIMx()->CCR1)[2*channel];
 
-        if( !(Sm_TIMx::mTIMx->CR1 & TIM_CR1_CEN) || CCRx == 0 || CCRx >= ARR
+        if( !(Sm_TIMx::TIMx()->CR1 & TIM_CR1_CEN) || CCRx == 0 || CCRx >= ARR
 #ifdef ADVANCED_TIMER  //如果是高级定时器
-            || !(Sm_TIMx::mTIMx->BDTR & TIM_BDTR_MOE)
+            || !(Sm_TIMx::TIMx()->BDTR & TIM_BDTR_MOE)
 #endif
           )
         { return 0; }

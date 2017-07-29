@@ -1,7 +1,6 @@
 #ifndef SM_USART_H
 #define SM_USART_H
 
-#include <map>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -71,10 +70,6 @@ public:
         nvic_init.NVIC_IRQChannelSubPriority = Default_USART_NVIC_IRQChannelSubPriority;
         nvic_init.NVIC_IRQChannelCmd = ENABLE;
         NVIC_Init(&nvic_init);
-    }
-
-    ~Sm_USART(void)
-    {
     }
 
     void setNVICPriority(uint8_t PreemptionPriority = Default_USART_NVIC_IRQChannelPreemptionPriority,

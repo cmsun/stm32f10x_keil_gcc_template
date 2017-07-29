@@ -1,4 +1,3 @@
-#include <map>
 #include "Sm_UART5.h"
 
 Sm::USART_IRQ uart5_irq;

@@ -1,13 +1,6 @@
 #include "Sm_TIM3.h"
 
-template<> TIM_TypeDef* const Sm_TIM3::mTIMx = TIM3;
-
-template<> TIM_TypeDef* const Sm_TIM3_PartialRemap::mTIMx = TIM3;
-
-template<> TIM_TypeDef* const Sm_TIM3_FullRemap::mTIMx = TIM3;
-
-Sm::SmCallback TIM3_Callback;   
-void *TIM3_CbArg;
+Sm::CALLBACK TIM3_Callback;   
 
 extern "C" void TIM3_IRQHandler(void)
 {
@@ -17,8 +10,8 @@ extern "C" void TIM3_IRQHandler(void)
 
     if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
     {
-        if(TIM3_Callback)
-            TIM3_Callback(TIM3_CbArg);
+        if(TIM3_Callback.pfun)
+            TIM3_Callback.pfun(TIM3_Callback.arg);
         TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
     }
 
@@ -27,31 +20,31 @@ extern "C" void TIM3_IRQHandler(void)
 #endif
 }
 
-void TIM3_PWM_DefPin_Init(Sm::PWM_Chl channel)
+void TIM3_PWM_DefPin_Init(Sm::PWM_Channel chl)
 {
     GPIO_TypeDef *GPIOx;
     uint32_t RCC_APB2Periph_GPIOx;
     uint16_t GPIO_Pin_x;
 
-    if(channel == Sm::PWM_Channel1)
+    if(chl == Sm::PWM_Channel_1)
     {
         GPIOx = GPIOA;
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOA;
         GPIO_Pin_x = GPIO_Pin_6;
     }
-    else if(channel == Sm::PWM_Channel2)
+    else if(chl == Sm::PWM_Channel_2)
     {
         GPIOx = GPIOA;
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOA;
         GPIO_Pin_x = GPIO_Pin_7;
     }
-    else if(channel == Sm::PWM_Channel3)
+    else if(chl == Sm::PWM_Channel_3)
     {
         GPIOx = GPIOB;
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB;
         GPIO_Pin_x = GPIO_Pin_0;
     }
-    else /* if(channel == Sm::PWM_Channel4) */
+    else /* if(chl == Sm::PWM_Channel_4) */
     {
         GPIOx = GPIOB;
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB;
@@ -67,27 +60,27 @@ void TIM3_PWM_DefPin_Init(Sm::PWM_Chl channel)
     GPIO_Init(GPIOx, &gpio_init);
 }
 
-void TIM3_PWM_PartialRemap_Init(Sm::PWM_Chl channel)
+void TIM3_PWM_PartialRemap_Init(Sm::PWM_Channel chl)
 {
     uint16_t GPIO_Pin_x;
     uint32_t RCC_APB2Periph_GPIOx;
 
-    if(channel == Sm::PWM_Channel1)
+    if(chl == Sm::PWM_Channel_1)
     {
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO;
         GPIO_Pin_x = GPIO_Pin_4;
     }
-    else if(channel == Sm::PWM_Channel2)
+    else if(chl == Sm::PWM_Channel_2)
     {
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO;
         GPIO_Pin_x = GPIO_Pin_5;
     }
-    else if(channel == Sm::PWM_Channel3)
+    else if(chl == Sm::PWM_Channel_3)
     {
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB;
         GPIO_Pin_x = GPIO_Pin_0;
     }
-    else /* if(channel == Sm::PWM_Channel4) */
+    else /* if(chl == Sm::PWM_Channel_4) */
     {
         RCC_APB2Periph_GPIOx = RCC_APB2Periph_GPIOB;
         GPIO_Pin_x =GPIO_Pin_1;
@@ -96,7 +89,7 @@ void TIM3_PWM_PartialRemap_Init(Sm::PWM_Chl channel)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOx, ENABLE);
     GPIO_PinRemapConfig(GPIO_PartialRemap_TIM3, ENABLE);
 
-    if(channel == Sm::PWM_Channel1)
+    if(chl == Sm::PWM_Channel_1)
         GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE); //关闭JTAG对PB4的占用
 
     GPIO_InitTypeDef gpio_init;
@@ -106,16 +99,55 @@ void TIM3_PWM_PartialRemap_Init(Sm::PWM_Chl channel)
     GPIO_Init(GPIOB, &gpio_init);
 }
 
-void TIM3_PWM_FullRemap_Init(Sm::PWM_Chl channel)
+void TIM3_PWM_FullRemap_Init(Sm::PWM_Channel chl)
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC|RCC_APB2Periph_AFIO, ENABLE); 
     GPIO_PinRemapConfig(GPIO_FullRemap_TIM3, ENABLE);
 
     GPIO_InitTypeDef gpio_init;
-    gpio_init.GPIO_Pin = (uint16_t)(1 << (channel+6));
+    gpio_init.GPIO_Pin = (uint16_t)(1 << (chl+6));
     gpio_init.GPIO_Mode = GPIO_Mode_AF_PP;
     gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOC, &gpio_init);
+}
+
+void TIM3_Encoder_DefPin_Init(uint16_t TIM_EncoderMode_x)
+{
+    if(TIM_EncoderMode_x == TIM_EncoderMode_TI1)
+        TIM3_PWM_DefPin_Init(Sm::PWM_Channel_1);
+    else if(TIM_EncoderMode_x == TIM_EncoderMode_TI2)
+        TIM3_PWM_DefPin_Init(Sm::PWM_Channel_2);
+    else
+    {
+        TIM3_PWM_DefPin_Init(Sm::PWM_Channel_1);
+        TIM3_PWM_DefPin_Init(Sm::PWM_Channel_2);
+    }
+}
+
+void TIM3_Encoder_FullRemap_Init(uint16_t TIM_EncoderMode_x)
+{
+    if(TIM_EncoderMode_x == TIM_EncoderMode_TI1)
+        TIM3_PWM_FullRemap_Init(Sm::PWM_Channel_1);
+    else if(TIM_EncoderMode_x == TIM_EncoderMode_TI2)
+        TIM3_PWM_FullRemap_Init(Sm::PWM_Channel_2);
+    else
+    {
+        TIM3_PWM_FullRemap_Init(Sm::PWM_Channel_1);
+        TIM3_PWM_FullRemap_Init(Sm::PWM_Channel_2);
+    }   
+}
+
+void TIM3_Encoder_PartialRemap_Init(uint16_t TIM_EncoderMode_x)
+{
+    if(TIM_EncoderMode_x == TIM_EncoderMode_TI1)
+        TIM3_PWM_PartialRemap_Init(Sm::PWM_Channel_1);
+    else if(TIM_EncoderMode_x == TIM_EncoderMode_TI2)
+        TIM3_PWM_PartialRemap_Init(Sm::PWM_Channel_2);
+    else
+    {
+        TIM3_PWM_PartialRemap_Init(Sm::PWM_Channel_1);
+        TIM3_PWM_PartialRemap_Init(Sm::PWM_Channel_2);
+    }   
 }
 
 void TIM3_ETR_DefPin_Init(void)

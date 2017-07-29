@@ -16,8 +16,8 @@ private:
 
 public:
     static void setCLKSource(uint32_t SysTick_CLKSource = SysTick_CLKSource_HCLK_Div8);
-    static void setTimeOut_ms(uint16_t nms, Sm::SmCallback callback, void *arg = 0);
-    static void setTimeOut_us(uint16_t nus, Sm::SmCallback callback, void *arg = 0);
+    static void setTimeOut_ms(uint16_t nms, void (*pfun)(void *), void *arg = 0);
+    static void setTimeOut_us(uint16_t nus, void (*pfun)(void *), void *arg = 0);
     static void delay_ms(uint32_t nms);
     static void delay_us(uint32_t nus);
     static void ITConfig(Sm::FunctionalState NewState);

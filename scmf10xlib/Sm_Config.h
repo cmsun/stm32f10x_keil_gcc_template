@@ -7,9 +7,9 @@
 #include "stm32f10x.h"
 #include "stm32f10x_conf.h"
 
-// #define DEBUG_VIA_SWO       //通过SWO打印debug信息 
+#define DEBUG_VIA_SWO       //通过SWO打印debug信息 
 // #define DEBUG_VIA_OPENOCD   //通过Openocd打印debug信息  
-#define DEBUG_VIA_USART     //通过串口打印debug信息 
+// #define DEBUG_VIA_USART     //通过串口打印debug信息 
 #if defined(DEBUG_VIA_SWO) && defined(DEBUG_VIA_OPENOCD)
 #error "There is a conflic between SWO and openocd!"
 #endif
@@ -21,9 +21,16 @@
 
 #ifdef __cplusplus
 namespace Sm{
+
 typedef void (*RCC_ClockCmd)(uint32_t, FunctionalState);
-typedef void (*SmCallback)(void *);
+
+typedef struct {
+    void (*pfun)(void *);
+    void *arg;
+} CALLBACK;
+
 using ::FunctionalState;
+
 }
 #endif
 

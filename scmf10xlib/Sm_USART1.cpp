@@ -1,4 +1,3 @@
-#include <map>
 #include "Sm_USART1.h"
 
 Sm::USART_IRQ usart1_irq;

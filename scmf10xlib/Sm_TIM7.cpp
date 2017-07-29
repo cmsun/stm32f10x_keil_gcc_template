@@ -1,9 +1,6 @@
 #include "Sm_TIM7.h"
 
-template<> TIM_TypeDef* const Sm_TIM7::mTIMx = TIM7;
-
-Sm::SmCallback TIM7_Callback;   
-void *TIM7_CbArg;
+Sm::CALLBACK TIM7_Callback;   
 
 extern "C" void TIM7_IRQHandler(void)
 {
@@ -13,8 +10,8 @@ extern "C" void TIM7_IRQHandler(void)
 
     if(TIM_GetITStatus(TIM7, TIM_IT_Update) != RESET)
     {
-        if(TIM7_Callback)
-            TIM7_Callback(TIM7_CbArg);
+        if(TIM7_Callback.pfun)
+            TIM7_Callback.pfun(TIM7_Callback.arg);
         TIM_ClearITPendingBit(TIM7, TIM_IT_Update);
     }
 
@@ -23,9 +20,14 @@ extern "C" void TIM7_IRQHandler(void)
 #endif
 }
 
-void TIM7_PWM_DefPin_Init(Sm::PWM_Chl)
+void TIM7_PWM_DefPin_Init(Sm::PWM_Channel)
 {
     //TIM7没有PWM功能
+}
+
+void TIM7_Encoder_DefPin_Init(uint16_t)
+{
+    //TIM7没有编码器功能
 }
 
 void TIM7_ETR_DefPin_Init(void)

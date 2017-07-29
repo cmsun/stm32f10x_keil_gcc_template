@@ -1,4 +1,3 @@
-#include <map>
 #include "Sm_UART4.h"
 
 Sm::USART_IRQ uart4_irq;

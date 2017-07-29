@@ -6,14 +6,13 @@ uint32_t Sm_SysTick::mFac_us = SystemCoreClock / 8 / 1000000;
 uint32_t Sm_SysTick::mMax_ms = 0xffffff / mFac_ms;
 uint32_t Sm_SysTick::mMax_us = 0xffffff / mFac_us;
 
-Sm::SmCallback SysTickCallback = 0;
-void *SysTickArg = 0;
+Sm::CALLBACK SysTickCallback;
 
 #if !defined(Sm_UCOS_Support)
 extern "C" void SysTick_Handler(void)
 {
-    if(SysTickCallback)
-        SysTickCallback(SysTickArg);
+    if(SysTickCallback.pfun != NULL)
+        SysTickCallback.pfun(SysTickCallback.arg);
 }
 #endif
 
@@ -94,13 +93,13 @@ void Sm_SysTick::delay_ms_private(uint16_t nms)
 *               对72M条件下8分频时mFac_ms==9000，所以nms<=1864
 ********************************************************************************
 */
-void Sm_SysTick::setTimeOut_ms(uint16_t nms, Sm::SmCallback callback, void *arg)
+void Sm_SysTick::setTimeOut_ms(uint16_t nms, void (*pfun)(void *), void *arg)
 {
     Sm_assert(nms <= mMax_ms);
 
     SysTick->LOAD = mFac_ms * nms - 1;
-    SysTickCallback = callback;
-    SysTickArg = arg;
+    SysTickCallback.pfun = pfun;
+    SysTickCallback.arg = arg;
 
     ITConfig(ENABLE);
 }
@@ -122,13 +121,13 @@ void Sm_SysTick::setTimeOut_ms(uint16_t nms, Sm::SmCallback callback, void *arg)
 *               对72M条件下8分步时mFac_us==9,所以nus<=1864135
 ********************************************************************************
 */
-void Sm_SysTick::setTimeOut_us(uint16_t nus, Sm::SmCallback callback, void *arg)
+void Sm_SysTick::setTimeOut_us(uint16_t nus, void (*pfun)(void *), void *arg)
 {
     Sm_assert(nus <= mMax_us);
 
     SysTick->LOAD = mFac_us * nus - 1;
-    SysTickCallback = callback;
-    SysTickArg = arg;
+    SysTickCallback.pfun = pfun;
+    SysTickCallback.arg = arg;
 
     ITConfig(ENABLE);
 }

@@ -20,9 +20,9 @@ public:
     static void setNVICPriority(uint8_t PreemptionPriority = Default_RTC_NVIC_IRQChannelPreemptionPriority,
                                 uint8_t SubPriority = Default_RTC_NVIC_IRQChannelSubPriority);
     static void secondITConfig(FunctionalState state);
-    static void setSecCallback(Sm::SmCallback process, void *arg = 0);
+    static void setSecCallback(void (*pfun)(void *), void *arg = 0);
     static void alarmITConfig(FunctionalState state);
-    static void setAlarmCallback(Sm::SmCallback process, void *arg = 0);
+    static void setAlarmCallback(void (*pfun)(void *), void *arg = 0);
 };
 
 #endif

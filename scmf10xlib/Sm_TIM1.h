@@ -9,10 +9,11 @@
 
 #include "Sm_TIM.h"
 
-extern Sm::SmCallback TIM1_Callback;   
-extern void *TIM1_CbArg;
-extern void TIM1_PWM_DefPin_Init(Sm::PWM_Chl);
-extern void TIM1_PWM_FullRemap_Init(Sm::PWM_Chl);
+extern Sm::CALLBACK TIM1_Callback;   
+extern void TIM1_PWM_DefPin_Init(Sm::PWM_Channel);
+extern void TIM1_PWM_FullRemap_Init(Sm::PWM_Channel);
+extern void TIM1_Encode_DefPin_Init(uint16_t);
+extern void TIM1_Encode_FullRemap_Init(uint16_t);
 extern void TIM1_ETR_DefPin_Init(void);
 extern void TIM1_ETR_FullRemap_Init(void);
 
@@ -20,19 +21,19 @@ typedef Sm_TIM<TIM1_BASE,
         RCC_APB2PeriphClockCmd,
         RCC_APB2Periph_TIM1,
         TIM1_PWM_DefPin_Init,
+        TIM1_Encode_DefPin_Init,
         TIM1_ETR_DefPin_Init,
         TIM1_UP_IRQn,
-        &TIM1_Callback,
-        &TIM1_CbArg> Sm_TIM1;
+        &TIM1_Callback> Sm_TIM1;
 
 typedef Sm_TIM<TIM1_BASE,
         RCC_APB2PeriphClockCmd,
         RCC_APB2Periph_TIM1,
         TIM1_PWM_FullRemap_Init,
+        TIM1_Encode_FullRemap_Init,
         TIM1_ETR_FullRemap_Init,
         TIM1_UP_IRQn,
-        &TIM1_Callback,
-        &TIM1_CbArg> Sm_TIM1_FullRemap;
+        &TIM1_Callback> Sm_TIM1_FullRemap;
 
 #undef EXTRA_CLOCK_MODE2
 

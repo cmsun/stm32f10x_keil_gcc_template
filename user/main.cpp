@@ -225,14 +225,14 @@ int main(int argc, char* argv[])
 
     //通用定时器PWM测试
     Sm_TIM3::initialize(1-1, 7200-1);
-    Sm_TIM3::PWMConfig(Sm::PWM_Channel1);    //PA6
-    Sm_TIM3::PWMConfig(Sm::PWM_Channel2);    //PA7
-    Sm_TIM3::PWMConfig(Sm::PWM_Channel3);    //PB0
-    Sm_TIM3::PWMConfig(Sm::PWM_Channel4);    //PB1
-    Sm_TIM3::setCompare(Sm::PWM_Channel1, 7200/2-1, true);
-    Sm_TIM3::setCompare(Sm::PWM_Channel2, 7200/3-1, true);
-    Sm_TIM3::setCompare(Sm::PWM_Channel3, 7200/4-1, true);
-    Sm_TIM3::setCompare(Sm::PWM_Channel4, 7200/5-1, true);
+    Sm_TIM3::PWMConfig(Sm::PWM_Channel_1);    //PA6
+    Sm_TIM3::PWMConfig(Sm::PWM_Channel_2);    //PA7
+    Sm_TIM3::PWMConfig(Sm::PWM_Channel_3);    //PB0
+    Sm_TIM3::PWMConfig(Sm::PWM_Channel_4);    //PB1
+    Sm_TIM3::setCompare(Sm::PWM_Channel_1, 7200/2-1, true);
+    Sm_TIM3::setCompare(Sm::PWM_Channel_2, 7200/3-1, true);
+    Sm_TIM3::setCompare(Sm::PWM_Channel_3, 7200/4-1, true);
+    Sm_TIM3::setCompare(Sm::PWM_Channel_4, 7200/5-1, true);
     Sm_TIM3::enable();
 
     //SysTick定时测试。SysTick定时和SysTick延时不能同时使用，会相互干扰

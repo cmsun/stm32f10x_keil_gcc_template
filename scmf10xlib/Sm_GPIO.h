@@ -21,17 +21,7 @@
 #include "Sm_Config.h"
 #include "Sm_Debug.h"
 
-namespace Sm{
-
-typedef struct EXTI_IRQ_t{
-    SmCallback pf_IRQ_Process;
-    void *p_IRQ_Argument;
-    EXTI_IRQ_t(): pf_IRQ_Process(NULL), p_IRQ_Argument(NULL) {/**/}
-} EXTI_IRQ;
-
-}
-
-extern Sm::EXTI_IRQ EXTI_IRQ_Table[];
+extern Sm::CALLBACK EXTI_IRQ_Table[];
 
 #define GPIO_TEMPLATE_PARAMETER uint32_t GPIOx_BASE, uint32_t RCC_APB2Periph_GPIOx, uint8_t GPIO_PortSourceGPIOx
 #define GPIO_CLASS Sm_GPIO<GPIOx_BASE, RCC_APB2Periph_GPIOx, GPIO_PortSourceGPIOx>
@@ -63,7 +53,7 @@ public:
             uint8_t NVIC_IRQChannelPreemptionPriority,
             uint8_t NVIC_IRQChannelSubPriority);
     static void ITConfig(uint8_t GPIO_PinSourcex, Sm::FunctionalState NewState);
-    static void setITCallback(uint8_t GPIO_PinSourcex, Sm::SmCallback callback, void *arg);
+    static void setITCallback(uint8_t GPIO_PinSourcex, void (*pfun)(void *), void *arg);
 };
 
 template<GPIO_TEMPLATE_PARAMETER>
@@ -231,12 +221,12 @@ void GPIO_CLASS::ITConfig(uint8_t GPIO_PinSourcex, Sm::FunctionalState NewState)
 }
 
 template<GPIO_TEMPLATE_PARAMETER>
-void GPIO_CLASS::setITCallback(uint8_t GPIO_PinSourcex, Sm::SmCallback callback, void *arg)
+void GPIO_CLASS::setITCallback(uint8_t GPIO_PinSourcex, void (*pfun)(void *), void *arg)
 {
     Sm_assert(IS_GPIO_PIN_SOURCE(GPIO_PinSourcex));
 
-    EXTI_IRQ_Table[GPIO_PinSourcex].pf_IRQ_Process = callback;
-    EXTI_IRQ_Table[GPIO_PinSourcex].p_IRQ_Argument = arg;
+    EXTI_IRQ_Table[GPIO_PinSourcex].pfun = pfun;
+    EXTI_IRQ_Table[GPIO_PinSourcex].arg = arg;
     //使能GPIO中断。
     ITConfig(GPIO_PinSourcex, ENABLE);
 }
