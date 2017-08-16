@@ -216,7 +216,6 @@ int main(int argc, char* argv[])
 
     //定时器编码器模式测试
     /*
-     * Sm_GPIOA::init_IO(GPIO_Pin_0|GPIO_Pin_1, GPIO_Mode_IN_FLOATING);
      * Sm_TIM2::initialize(0, 0xffff);
      * Sm_TIM2::setCallback([&](void *){trace_printf("encoder update...\n");});
      * Sm_TIM2::encoderConfig();
@@ -224,7 +223,7 @@ int main(int argc, char* argv[])
      */
 
     //通用定时器PWM测试
-    Sm_TIM3::initialize(1-1, 7200-1);
+    Sm_TIM3::initialize(2-1, 7200-1);
     Sm_TIM3::PWMConfig(Sm::PWM_Channel_1);    //PA6
     Sm_TIM3::PWMConfig(Sm::PWM_Channel_2);    //PA7
     Sm_TIM3::PWMConfig(Sm::PWM_Channel_3);    //PB0

@@ -298,7 +298,7 @@ static void createTask(void)
     OS_CRITICAL_EXIT();
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     Sm_Debug("motion running...\n");
 

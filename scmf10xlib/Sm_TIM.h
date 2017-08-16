@@ -109,10 +109,16 @@ void TIME_CLASS::initialize(uint16_t PSC, uint16_t ARR,
 
     //设置定时器更新中断的默认中断优先级，并使能中断线。
     setNVICPriority(TIMx_IRQn);
-    //打开定时器更新中断线，对于高级定时器的其它中断线，在需要时使用setNVICPriority()打开。
+    //使能定时器更新中断线，对于高级定时器的其它中断线，在需要时使用setNVICPriority()打开。
     NVIC_EnableIRQ(TIMx_IRQn);
 
-    //把TIMx_CR1的URS位置1，使UG=1产生更新事件时不产生更新中断。而溢出更新事件可以正常产生更新中断。
+    //定时器的CR1寄存器的ARPE位被置0时，ARR的预装载寄存器(仅是ARR，不包括PSC和CCR1、CCR2、CCR3、CCR4)
+    //和影子寄存器是连通的，即写入序装载寄存器的值会马上送入影子寄存器中。如果ARPE位被
+    //置1，则序装载寄存器的值在下一次UEV更新事件中才能被送入影子寄存器。
+    TIMx()->CR1 |= TIM_CR1_ARPE;
+
+    //把TIMx_CR1的URS位置1，使得软件置位UG位产生更新事件时不会产生更新中断和DMA传输。
+    //而溢出更新事件可以正常产生更新中断。
     TIMx()->CR1 |= TIM_CR1_URS;
 
     //对TIMx_EGR的UG位软件置1会产生一次更新事件。
@@ -180,7 +186,7 @@ void TIME_CLASS::setCallback(void (*pfun)(void *), void *arg)
     callback->pfun = pfun;
     callback->arg = arg;
 
-    //必须先清除中断标志位再使能定时器更新中断，否则不管有没有使能定时器都会产即进入中断。
+    //必须先清除中断标志位再使能定时器更新中断，否则不管有没有使能中断，都会立即进入中断。
     TIM_ClearITPendingBit(TIMx(), TIM_IT_Update);
 
     //使能定时器更新中断
