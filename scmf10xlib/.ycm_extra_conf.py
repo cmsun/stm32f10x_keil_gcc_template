@@ -30,30 +30,22 @@ flags = [
     '-Wfloat-equal', 
 
     '-x', 'c++',
-    '-std=gnu++11',
+    '-std=c++99',
 
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/../../../../arm-none-eabi/include/c++/5.2.1',
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/../../../../arm-none-eabi/include/c++/5.2.1/arm-none-eabi',
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/../../../../arm-none-eabi/include/c++/5.2.1/backward',
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/include',
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/include-fixed',
-    '-isystem', r'E:\programfiles\gnu tools arm embedded\5.2 2015q4\bin\../lib/gcc/arm-none-eabi/5.2.1/../../../../arm-none-eabi/include',
+    '-isystem', r'C:\Keil_v5\ARM\ARMCC\include',
+    '-isystem', r'C:\Keil_v5\ARM\ARMCC\include\rw',
 
     '-I', r'.',
     '-I', r'../scmf10xlib',
     '-I', r'../cmsis',
     '-I', r'../cmsis/startup',
     '-I', r'../StdPeriphDriver/v3.5/inc',
+    '-I', r'../StdPeriphDriver/v3.5/src',
     '-I', r'../utilities',
     '-I', r'../user',
 
-    '-D__GNUC__',
     '-DDEBUG',
-    '-DHSE_VALUE=8000000',
-    '-DOS_USE_TRACE_SEMIHOSTING_DEBUG',
     '-DSTM32F10X_HD',
-    '-DTRACE',
-    '-DUSE_FULL_ASSERT',
     '-DUSE_STDPERIPH_DRIVER',
 ] 
 compilation_database_folder = '' 

@@ -40,7 +40,7 @@ public:
         ADC_InitTypeDef adc_init;
         adc_init.ADC_Mode = mode;                               //ADC模式。
         adc_init.ADC_ScanConvMode = scanConvMode;               //是否开启扫描模式(扫描模式用于多通道采集)
-        adc_init.ADC_ContinuousConvMode = continuousConvMode;   //是否连续不断转换。
+        adc_init.ADC_ContinuousConvMode = continuousConvMode;   //是否循环转换。
         adc_init.ADC_ExternalTrigConv = externalTrigConv;       //是否使用外部触发转换。
         adc_init.ADC_DataAlign = dataAlign;                     //数据对齐。
         adc_init.ADC_NbrOfChannel = nbrOfChannel;               //要转换的通道数目。
@@ -48,6 +48,7 @@ public:
 
         ADC_Cmd((ADC_TypeDef *)ADCx, ENABLE);
 
+        //使用ADC前要校准，以提高转换精确度
         ADC_ResetCalibration((ADC_TypeDef *)ADCx);
         while(ADC_GetResetCalibrationStatus((ADC_TypeDef *)ADCx))
             ;
@@ -75,6 +76,7 @@ public:
             }
             else
             {
+                //只有ADC1才有通道16、17。
                 //通道16：芯片温度传感器
                 //通道17：内部参照电压
                 Sm_assert(ADCx == ADC1_BASE);
@@ -101,7 +103,8 @@ public:
         ADC_RegularChannelConfig((ADC_TypeDef *)ADCx, ADC_Channel_x, Rank, ADC_SampleTime);
     }
 
-    static void softwareStartConvCmd(FunctionalState NewState)
+    //软件触发转换
+    static inline void softwareStartConvCmd(FunctionalState NewState)
     {
         ADC_SoftwareStartConvCmd((ADC_TypeDef *)ADCx, NewState);
     }
@@ -110,30 +113,41 @@ public:
     static uint16_t softwareGetValue(void)
     {
         ADC_SoftwareStartConvCmd((ADC_TypeDef *)ADCx, ENABLE);
-        while(!ADC_GetFlagStatus((ADC_TypeDef *)ADCx, ADC_FLAG_EOC));
+        while(!ADC_GetFlagStatus((ADC_TypeDef *)ADCx, ADC_FLAG_EOC))
+            ;
         return ADC_GetConversionValue((ADC_TypeDef *)ADCx);
     }
 
 /*
- *     void externalTrigInjectedConvConfig(uint32_t ADC_ExternalTrigInjecConv_x)
+ *     void injectedConvConfig(uint32_t ADC_ExternalTrigInjecConv_x = ADC_ExternalTrigConv_None,
+ *                             uint8_t Channel_start = 1,
+ *                             uint8_t Channel_end = 1,
+ *                             uint8_t ADC_SampleTime_x = ADC_SampleTime_239Cycles5)
  *     {
- *         ADC_ExternalTrigConvCmd(ADCx, ENABLE);
- *         ADC_ExternalTrigInjectedConvConfig(ADC_ExternalTrigInjecConv_x);
+ *         Sm_assert(Channel_end >= Channel_start);
+ *         Sm_assert(Channel_start >= ADC_Channel_0 && Channel_end <= ADC_Channel_8);
+ * 
+ *         ADC_ExternalTrigInjectedConvConfig((ADC_TypeDef *)ADCx, ADC_ExternalTrigInjecConv_x);
+ *         ADC_InjectedSequencerLengthConfig((ADC_TypeDef *)ADCx, Channel_end - Channel_start + 1);
+ *         for(int i = Channel_start; i <= Channel_end; ++i)
+ *             ADC_InjectedChannelConfig((ADC_TypeDef *)ADCx, i, ADC_SampleTime_x);
+ *         ADC_SetInjectedOffset((ADC_TypeDef *)ADCx, Channel_start, 0);
  *     }
- */
-
-/*
+ * 
  *     void softwareGetInjectedValue(FunctionalState NewState)
  *     {
  *         ADC_SoftwareStartInjectedConvCmd(ADCx, NewState);
- *         while(!ADC_GetIn(ADCx, ADC_FLAG_EOC ));
+ *         while(!ADC_GetSoftwareStartInjectedConvCmdStatus((ADC_TypeDef *)ADCx))
+ *             ;
+ *         return ADC_GetInjectedConversionValue((ADC_TypeDef *)ADCx);
  *     }
  */
 
+    //如果使用多通道循环扫描方式，则可以DAM将每个通道转换的结果写到buff只，以防止，
     static void regularDMAConfig(uint16_t *buff, uint16_t size)
     {
-        Sm_assert(size >= 1 && size <= 16);
-        Sm_assert(ADCx == ADC1_BASE || ADCx == ADC3_BASE);
+        Sm_assert(size >= 1 && size <= 16);                 //1到16个通道
+        Sm_assert(ADCx == ADC1_BASE || ADCx == ADC3_BASE);  //ADC2没有DMA功能
 
         DMA_InitTypeDef dma_init;
         dma_init.DMA_PeripheralBaseAddr = (uint32_t)&((ADC_TypeDef *)ADCx)->DR;
