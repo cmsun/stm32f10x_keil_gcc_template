@@ -30,19 +30,19 @@ flags = [
     '-Wfloat-equal', 
 
     '-x', 'c++',
-    '-std=c++99',
+    '-std=c++11',
 
     '-isystem', r'C:\Keil_v5\ARM\ARMCC\include',
     '-isystem', r'C:\Keil_v5\ARM\ARMCC\include\rw',
 
     '-I', r'.',
-    '-I', r'../scmf10xlib',
-    '-I', r'../cmsis',
-    '-I', r'../cmsis/startup',
-    '-I', r'../StdPeriphDriver/v3.5/inc',
-    '-I', r'../StdPeriphDriver/v3.5/src',
-    '-I', r'../utilities',
-    '-I', r'../user',
+    '-I', r'scmf10xlib',
+    '-I', r'cmsis',
+    '-I', r'cmsis/startup',
+    '-I', r'StdPeriphDriver/v3.5/inc',
+    '-I', r'StdPeriphDriver/v3.5/src',
+    '-I', r'utilities',
+    '-I', r'user',
 
     '-DDEBUG',
     '-DSTM32F10X_HD',

@@ -383,11 +383,14 @@ int main(int argc, char* argv[])
      * PEout(5) = 1;
      */
 
+    int value;
     while(1)
     {
+        scanf("%d", &value);
+        Sm_Debug("%d", value * 10);
         // Sm_SysTick::delay_ms(1000);
         // Sm_Debug("%d %d %d %d %d %d\n", adc_buff[11], adc_buff[12], adc_buff[13], adc_buff[14], adc_buff[15], adc_buff[16]);
-        delay_ms(1);
+        // delay_ms(1);
         Sm_GPIOB::toggleOutputBit(GPIO_Pin_5);
         Sm_GPIOE::toggleOutputBit(GPIO_Pin_5);
     }
