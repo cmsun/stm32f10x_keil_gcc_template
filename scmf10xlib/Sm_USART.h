@@ -56,7 +56,7 @@ public:
         USART_Init((USART_TypeDef *)USARTx, &usart_init);
 
         USART_ITConfig((USART_TypeDef *)USARTx, USART_IT_RXNE, ENABLE);  //开启串口中断
-        USART_Cmd((USART_TypeDef *)USARTx, ENABLE);  //全能串口
+        USART_Cmd((USART_TypeDef *)USARTx, ENABLE);  //使能串口
 
         //初始化USART后在发送第一个字符之前要先读取USART_SR寄存器的TC位
         //清除TC位清除，否则第一个数据没发送完成就会被第二个数据覆盖。

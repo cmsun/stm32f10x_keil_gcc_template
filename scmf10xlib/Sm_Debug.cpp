@@ -1,10 +1,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-//#include "diag/Trace.h"
 #include "Sm_Config.h"
 
-#ifdef DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 
 #if defined(DEBUG_VIA_USART)
 #include "Sm_USART1.h"
@@ -38,4 +37,4 @@ extern "C" void Sm_printf(const char *format, ...)
 #endif
 }
 
-#endif //#ifdef DEBUG
+#endif //DEBUG or _DEBUG

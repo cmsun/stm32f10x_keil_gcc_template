@@ -12,7 +12,7 @@
 #ifndef SM_DEBUG_H
 #define SM_DEBUG_H
 
-#ifdef DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +34,6 @@ void Sm_printf(const char *format, ...);
 #define Sm_Debug(format, args...) ((void)0)
 #define Sm_assert(expr) ((void)0)
 
-#endif //DEBUG
+#endif //DEBUG or _DEBUG
 
 #endif //SM_DEBUG_H

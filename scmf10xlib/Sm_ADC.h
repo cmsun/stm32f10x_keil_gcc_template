@@ -63,41 +63,26 @@ public:
         if(ADCx == ADC1_BASE || ADCx == ADC2_BASE)
         {
             if(ADC_Channel_x <= ADC_Channel_7)
-            {
                 Sm_GPIOA::init_IO( 1 << (ADC_Channel_x+1), GPIO_Mode_AIN);
-            }
             else if(ADC_Channel_x <= ADC_Channel_9)
-            {
                 Sm_GPIOB::init_IO( 1 << (ADC_Channel_x-7), GPIO_Mode_AIN);
-            }
             else if(ADC_Channel_x <= ADC_Channel_15)
-            {
                 Sm_GPIOC::init_IO( 1 << (ADC_Channel_x-9), GPIO_Mode_AIN);
-            }
             else
-            {
-                //只有ADC1才有通道16、17。
-                //通道16：芯片温度传感器
-                //通道17：内部参照电压
-                Sm_assert(ADCx == ADC1_BASE);
-            }
+                Sm_assert(ADCx == ADC1_BASE);   //只有ADC1才有通道16、17。
+                                                //通道16：芯片温度传感器
+                                                //通道17：内部参照电压
         }
         else //ADC3
         {
             Sm_assert(ADC_Channel_x < ADC_Channel_13 && ADC_Channel_x != ADC_Channel_9);
 
             if(ADC_Channel_x <= ADC_Channel_3)
-            {
                 Sm_GPIOA::init_IO( 1 << (ADC_Channel_x+1), GPIO_Mode_AIN);
-            }
             else if(ADC_Channel_x <= ADC_Channel_8)
-            {
                 Sm_GPIOF::init_IO( 1 << (ADC_Channel_x+3), GPIO_Mode_AIN);
-            }
             else
-            {
                 Sm_GPIOC::init_IO( 1 << (ADC_Channel_x-9), GPIO_Mode_AIN);
-            }
         }
 
         ADC_RegularChannelConfig((ADC_TypeDef *)ADCx, ADC_Channel_x, Rank, ADC_SampleTime);
@@ -143,7 +128,8 @@ public:
  *     }
  */
 
-    //如果使用多通道循环扫描方式，则可以DAM将每个通道转换的结果写到buff只，以防止，
+    //如果使用多通道循环扫描方式，则可以DAM将每个通道转换的结果写到buff只，以防止DR寄
+    //存器中的值被覆盖。
     static void regularDMAConfig(uint16_t *buff, uint16_t size)
     {
         Sm_assert(size >= 1 && size <= 16);                 //1到16个通道
