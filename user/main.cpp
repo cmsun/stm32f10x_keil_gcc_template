@@ -54,7 +54,7 @@ void led2On(void){Sm_GPIOE::resetBits(GPIO_Pin_5);}
 void led2Off(void){Sm_GPIOE::setBits(GPIO_Pin_5);}
 void beepOn(void){Sm_GPIOB::resetBits(GPIO_Pin_8);}
 void beepOff(void){Sm_GPIOB::setBits(GPIO_Pin_8);}
-void gpioe5toggle(void *){Sm_GPIOE::toggleOutputBit(GPIO_Pin_5);}
+void gpioe5toggle(void *){PEout(5) ^= 1;}
 
 void keyUpCallback(void *arg)
 {
@@ -321,25 +321,25 @@ int main(int argc, char* argv[])
     //ADC测试-------------------------------------------------------------------
     /*
      * uint16_t *adc_buff = new uint16_t[16];
-     * Sm_ADC1 dac1(16, ENABLE, ENABLE); //使用16个规则通道，多通道扫描，循环扫描。
-     * dac1.regularChannelConfig(ADC_Channel_0, 1);    //A0
-     * dac1.regularChannelConfig(ADC_Channel_1, 2);    //A1
-     * dac1.regularChannelConfig(ADC_Channel_2, 3);    //A2
-     * dac1.regularChannelConfig(ADC_Channel_3, 4);    //A3
-     * dac1.regularChannelConfig(ADC_Channel_4, 5);    //A4
-     * dac1.regularChannelConfig(ADC_Channel_5, 6);    //A5
-     * dac1.regularChannelConfig(ADC_Channel_6, 7);    //A6
-     * dac1.regularChannelConfig(ADC_Channel_7, 8);    //A7
-     * dac1.regularChannelConfig(ADC_Channel_8, 9);    //B0
-     * dac1.regularChannelConfig(ADC_Channel_9, 10);   //B1
-     * dac1.regularChannelConfig(ADC_Channel_10, 11);  //C0
-     * dac1.regularChannelConfig(ADC_Channel_11, 12);  //C1
-     * dac1.regularChannelConfig(ADC_Channel_12, 13);  //C2
-     * dac1.regularChannelConfig(ADC_Channel_13, 14);  //C3
-     * dac1.regularChannelConfig(ADC_Channel_14, 15);  //C4
-     * dac1.regularChannelConfig(ADC_Channel_15, 16);  //C5
-     * dac1.regularDMAConfig(adc_buff, 16);
-     * dac1.softwareStartConvCmd(ENABLE);
+     * Sm_ADC1 adc1(16, ENABLE, ENABLE); //使用16个规则通道，多通道扫描，循环扫描。
+     * adc1.regularChannelConfig(ADC_Channel_0, 1);    //A0
+     * adc1.regularChannelConfig(ADC_Channel_1, 2);    //A1
+     * adc1.regularChannelConfig(ADC_Channel_2, 3);    //A2
+     * adc1.regularChannelConfig(ADC_Channel_3, 4);    //A3
+     * adc1.regularChannelConfig(ADC_Channel_4, 5);    //A4
+     * adc1.regularChannelConfig(ADC_Channel_5, 6);    //A5
+     * adc1.regularChannelConfig(ADC_Channel_6, 7);    //A6
+     * adc1.regularChannelConfig(ADC_Channel_7, 8);    //A7
+     * adc1.regularChannelConfig(ADC_Channel_8, 9);    //B0
+     * adc1.regularChannelConfig(ADC_Channel_9, 10);   //B1
+     * adc1.regularChannelConfig(ADC_Channel_10, 11);  //C0
+     * adc1.regularChannelConfig(ADC_Channel_11, 12);  //C1
+     * adc1.regularChannelConfig(ADC_Channel_12, 13);  //C2
+     * adc1.regularChannelConfig(ADC_Channel_13, 14);  //C3
+     * adc1.regularChannelConfig(ADC_Channel_14, 15);  //C4
+     * adc1.regularChannelConfig(ADC_Channel_15, 16);  //C5
+     * adc1.regularDMAConfig(adc_buff, 16);
+     * adc1.softwareStartConvCmd(ENABLE);
      */
 
     /*
@@ -386,13 +386,12 @@ int main(int argc, char* argv[])
     int value;
     while(1)
     {
-        scanf("%d", &value);
-        Sm_Debug("%d", value * 10);
-        // Sm_SysTick::delay_ms(1000);
+        // scanf("%d", &value);
+        // Sm_Debug("%d", value * 10);
         // Sm_Debug("%d %d %d %d %d %d\n", adc_buff[11], adc_buff[12], adc_buff[13], adc_buff[14], adc_buff[15], adc_buff[16]);
-        // delay_ms(1);
-        Sm_GPIOB::toggleOutputBit(GPIO_Pin_5);
-        Sm_GPIOE::toggleOutputBit(GPIO_Pin_5);
+        Sm_SysTick::delay_ms(10);
+        PBout(5) ^= 1;
+        PEout(5) ^= 1;
     }
 
     return 0;
