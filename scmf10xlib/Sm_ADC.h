@@ -159,8 +159,8 @@ public:
         {
             RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);
             DMA_DeInit(DMA2_Channel5);
-            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);
-            DMA_DeInit(DMA2_Channel5);
+            DMA_Init(DMA2_Channel5, &dma_init);
+            DMA_Cmd(DMA2_Channel5, ENABLE);
         }
 
         ADC_DMACmd((ADC_TypeDef *)ADCx, ENABLE); //只有ADC1和ADC3有DMA功能
