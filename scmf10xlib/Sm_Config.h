@@ -14,7 +14,7 @@
 #error "There is a conflic between SWO and openocd!"
 #endif
 
-// #define Sm_UCOS_Support //是否支持UCOS系统
+#define Sm_UCOS_Support //是否支持UCOS系统
 #ifdef Sm_UCOS_Support
 #include "includes.h"
 #endif

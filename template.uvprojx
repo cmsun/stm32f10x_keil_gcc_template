@@ -8,8 +8,8 @@
   <Targets>
     <Target>
       <TargetName>template</TargetName>
-      <ToolsetNumber>0x4</ToolsetNumber>
-      <ToolsetName>ARM-ADS</ToolsetName>
+      <ToolsetNumber>0x3</ToolsetNumber>
+      <ToolsetName>ARM-GNU</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103ZE</Device>
@@ -31,8 +31,8 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F103ZE$SVD\STM32F103xx.svd</SFDFile>
-          <bCustSvd>0</bCustSvd>
+          <SFDFile>C:\Keil_v5\ARM\Pack\Keil\STM32F1xx_DFP\1.0.5\SVD\STM32F103xx.SFR</SFDFile>
+          <bCustSvd>1</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
@@ -50,9 +50,9 @@
           <OutputName>template</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>1</CreateHexFile>
+          <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -123,7 +123,7 @@
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
           <Simulator>
-            <UseSimulator>0</UseSimulator>
+            <UseSimulator>1</UseSimulator>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -131,23 +131,23 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>1</LimitSpeedToRealTime>
+            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
             <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
-            <UseTarget>1</UseTarget>
+            <UseTarget>0</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>0</RunToMain>
+            <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
             <RestoreWatchpoints>1</RestoreWatchpoints>
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>11</TargetSelection>
+          <TargetSelection>8</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -171,10 +171,10 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4103</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -182,9 +182,9 @@
           <pFcArmRoot></pFcArmRoot>
           <FcArmLst>0</FcArmLst>
         </Utilities>
-        <TargetArmAds>
-          <ArmAdsMisc>
-            <GenerateListings>0</GenerateListings>
+        <TargetArm>
+          <ArmMisc>
+            <asLst>0</asLst>
             <asHll>1</asHll>
             <asAsm>1</asAsm>
             <asMacX>1</asMacX>
@@ -196,23 +196,7 @@
             <ldmm>1</ldmm>
             <ldXref>1</ldXref>
             <BigEnd>0</BigEnd>
-            <AdsALst>1</AdsALst>
-            <AdsACrf>1</AdsACrf>
-            <AdsANop>0</AdsANop>
-            <AdsANot>0</AdsANot>
-            <AdsLLst>1</AdsLLst>
-            <AdsLmap>1</AdsLmap>
-            <AdsLcgr>1</AdsLcgr>
-            <AdsLsym>1</AdsLsym>
-            <AdsLszi>1</AdsLszi>
-            <AdsLtoi>1</AdsLtoi>
-            <AdsLsun>0</AdsLsun>
-            <AdsLven>1</AdsLven>
-            <AdsLsxf>1</AdsLsxf>
-            <RvctClst>0</RvctClst>
-            <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M3"</AdsCpuType>
-            <RvctDeviceName></RvctDeviceName>
+            <GCPUTYP>"Cortex-M3"</GCPUTYP>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
             <uocRam>0</uocRam>
@@ -223,29 +207,6 @@
             <RvdsVP>0</RvdsVP>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
-            <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
-            <EndSel>0</EndSel>
-            <uLtcg>0</uLtcg>
-            <RoSelD>3</RoSelD>
-            <RwSelD>3</RwSelD>
-            <CodeSel>0</CodeSel>
-            <OptFeed>0</OptFeed>
-            <NoZi1>0</NoZi1>
-            <NoZi2>0</NoZi2>
-            <NoZi3>0</NoZi3>
-            <NoZi4>0</NoZi4>
-            <NoZi5>0</NoZi5>
-            <Ro1Chk>0</Ro1Chk>
-            <Ro2Chk>0</Ro2Chk>
-            <Ro3Chk>0</Ro3Chk>
-            <Ir1Chk>1</Ir1Chk>
-            <Ir2Chk>0</Ir2Chk>
-            <Ra1Chk>0</Ra1Chk>
-            <Ra2Chk>0</Ra2Chk>
-            <Ra3Chk>0</Ra3Chk>
-            <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -292,117 +253,60 @@
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </XRAM>
-              <OCR_RVCT1>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT1>
-              <OCR_RVCT2>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT2>
-              <OCR_RVCT3>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT3>
-              <OCR_RVCT4>
-                <Type>1</Type>
-                <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
-              </OCR_RVCT4>
-              <OCR_RVCT5>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT5>
-              <OCR_RVCT6>
+              <IRAM2>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
-              </OCR_RVCT6>
-              <OCR_RVCT7>
+              </IRAM2>
+              <IROM2>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
-              </OCR_RVCT7>
-              <OCR_RVCT8>
-                <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT8>
-              <OCR_RVCT9>
-                <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
-              </OCR_RVCT9>
-              <OCR_RVCT10>
-                <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT10>
+              </IROM2>
             </OnChipMemories>
-            <RvctStartVector></RvctStartVector>
-          </ArmAdsMisc>
-          <Cads>
+          </ArmMisc>
+          <Carm>
+            <arpcs>1</arpcs>
+            <stkchk>0</stkchk>
+            <reentr>0</reentr>
             <interw>1</interw>
-            <Optim>4</Optim>
-            <oTime>0</oTime>
-            <SplitLS>0</SplitLS>
-            <OneElfS>1</OneElfS>
+            <bigend>0</bigend>
             <Strict>0</Strict>
-            <EnumInt>0</EnumInt>
-            <PlainCh>0</PlainCh>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
+            <Optim>5</Optim>
             <wLevel>2</wLevel>
-            <uThumb>0</uThumb>
-            <uSurpInc>0</uSurpInc>
-            <uC99>1</uC99>
-            <useXO>0</useXO>
+            <uThumb>1</uThumb>
             <VariousControls>
-              <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,DEBUG</Define>
+              <MiscControls>-std=c++11</MiscControls>
+              <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD,DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\scmf10xlib;.\StdPeriphDriver\v3.5\inc;.\user;.\cmsis</IncludePath>
+              <IncludePath>.\cmsis;.\cmsis\GNU;.\scmf10xlib;.\StdPeriphDriver\v3.5\inc;.\user;.\UCOSIII\Boards\STM32F103\GNU\BSP;.\UCOSIII\Boards\STM32F103\GNU\Cfg;.\UCOSIII\Boards\STM32F103\GNU\Ports;.\UCOSIII\uC-CPU;.\UCOSIII\uC-LIB;.\UCOSIII\uCOS-III;.\cmsis\GNU\cortexm</IncludePath>
             </VariousControls>
-          </Cads>
-          <Aads>
+          </Carm>
+          <Aarm>
+            <bBE>0</bBE>
             <interw>1</interw>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
-            <thumb>0</thumb>
-            <SplitLS>0</SplitLS>
-            <SwStkChk>0</SwStkChk>
-            <NoWarn>0</NoWarn>
-            <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
-          </Aads>
-          <LDads>
+          </Aarm>
+          <LDarm>
             <umfTarg>1</umfTarg>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
+            <enaGarb>0</enaGarb>
+            <noStart>1</noStart>
             <noStLib>0</noStLib>
-            <RepFail>1</RepFail>
-            <useFile>0</useFile>
-            <TextAddressRange>0x08000000</TextAddressRange>
-            <DataAddressRange>0x20000000</DataAddressRange>
-            <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
-            <IncludeLibs></IncludeLibs>
-            <IncludeLibsPath></IncludeLibsPath>
+            <uMathLib>0</uMathLib>
+            <TextAddressRange></TextAddressRange>
+            <DataAddressRange></DataAddressRange>
+            <BSSAddressRange></BSSAddressRange>
+            <IncludeLibs>stdc++_nano</IncludeLibs>
+            <IncludeDir></IncludeDir>
             <Misc></Misc>
-            <LinkerInputFile></LinkerInputFile>
-            <DisabledWarnings></DisabledWarnings>
-          </LDads>
-        </TargetArmAds>
+            <ScatterFile>.\cmsis\GNU\ldscripts\stm32f10x.ld</ScatterFile>
+          </LDarm>
+        </TargetArm>
       </TargetOption>
       <Groups>
         <Group>
@@ -427,16 +331,6 @@
               <FileName>Sm_Debug.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\scmf10xlib\Sm_Debug.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Sm_DAC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_DAC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Sm_RTC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_RTC.cpp</FilePath>
             </File>
             <File>
               <FileName>Sm_TIM1.cpp</FileName>
@@ -479,29 +373,14 @@
               <FilePath>.\scmf10xlib\Sm_TIM8.cpp</FilePath>
             </File>
             <File>
-              <FileName>Sm_USART2.cpp</FileName>
+              <FileName>Sm_Pluse.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_USART2.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Sm_UART4.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_UART4.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Sm_UART5.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_UART5.cpp</FilePath>
+              <FilePath>.\scmf10xlib\Sm_Pluse.cpp</FilePath>
             </File>
             <File>
               <FileName>Sm_USART1.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\scmf10xlib\Sm_USART1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Sm_USART3.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\scmf10xlib\Sm_USART3.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -511,17 +390,12 @@
             <File>
               <FileName>core_cm3.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\cmsis\core_cm3.c</FilePath>
+              <FilePath>.\cmsis\GNU\core_cm3.c</FilePath>
             </File>
             <File>
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\cmsis\system_stm32f10x.c</FilePath>
-            </File>
-            <File>
-              <FileName>startup_stm32f10x_hd.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\cmsis\startup\startup_stm32f10x_hd.s</FilePath>
+              <FilePath>.\cmsis\GNU\system_stm32f10x.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -534,41 +408,6 @@
               <FilePath>.\StdPeriphDriver\v3.5\src\misc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f10x_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_bkp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_bkp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_cec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_cec.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_crc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_crc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_dac.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_dbgmcu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_dbgmcu.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f10x_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_dma.c</FilePath>
@@ -577,11 +416,6 @@
               <FileName>stm32f10x_exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_exti.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_fsmc.c</FileName>
@@ -594,16 +428,6 @@
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f10x_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_iwdg.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f10x_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_pwr.c</FilePath>
@@ -612,21 +436,6 @@
               <FileName>stm32f10x_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_rcc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_sdio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_tim.c</FileName>
@@ -638,30 +447,230 @@
               <FileType>1</FileType>
               <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_usart.c</FilePath>
             </File>
-            <File>
-              <FileName>stm32f10x_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\StdPeriphDriver\v3.5\src\stm32f10x_wwdg.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>main.cpp</FileName>
+              <FileName>motion.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\user\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>retarget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\retarget.c</FilePath>
+              <FilePath>.\user\motion.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>utilities</GroupName>
+        </Group>
+        <Group>
+          <GroupName>newlib</GroupName>
+          <Files>
+            <File>
+              <FileName>_exit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\newlib\_exit.c</FilePath>
+            </File>
+            <File>
+              <FileName>_sbrk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\newlib\_sbrk.c</FilePath>
+            </File>
+            <File>
+              <FileName>_syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\newlib\_syscalls.c</FilePath>
+            </File>
+            <File>
+              <FileName>assert.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\newlib\assert.c</FilePath>
+            </File>
+            <File>
+              <FileName>_startup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\newlib\_startup.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ucosiii</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\BSP\bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_app_hooks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Cfg\os_app_hooks.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Ports\cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Ports\os_cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_a.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Ports\cpu_a.s</FilePath>
+            </File>
+            <File>
+              <FileName>lib_mem_a.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Ports\lib_mem_a.s</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_a.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\UCOSIII\Boards\STM32F103\GNU\Ports\os_cpu_a.s</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uC-CPU\cpu_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>lib_ascii.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uC-LIB\lib_ascii.c</FilePath>
+            </File>
+            <File>
+              <FileName>lib_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uC-LIB\lib_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>lib_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uC-LIB\lib_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>lib_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uC-LIB\lib_str.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_cfg_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_cfg_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_dbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_dbg.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_flag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_flag.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_int.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_msg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_msg.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_pend_multi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_pend_multi.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_prio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_prio.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_q.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_q.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_stat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_stat.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_tick.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_tmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_var.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UCOSIII\uCOS-III\os_var.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cortexm</GroupName>
+          <Files>
+            <File>
+              <FileName>_initialize_hardware.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\cmsis\GNU\cortexm\_initialize_hardware.c</FilePath>
+            </File>
+            <File>
+              <FileName>_reset_hardware.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\cmsis\GNU\cortexm\_reset_hardware.c</FilePath>
+            </File>
+            <File>
+              <FileName>exception_handlers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\cmsis\GNU\cortexm\exception_handlers.c</FilePath>
+            </File>
+            <File>
+              <FileName>vectors_stm32f10x.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\cmsis\GNU\cortexm\vectors_stm32f10x.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

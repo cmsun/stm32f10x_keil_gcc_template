@@ -29,7 +29,7 @@
 extern Sm::Pluse_t                      TIM3_Pluse;
 
 //脉冲输出：GPIO PA6
-typedef Sm_Pluse<Sm_TIM3, Sm::PWM_Channel1, TIM3_CR1_ADDR,
+typedef Sm_Pluse<Sm_TIM3, Sm::PWM_Channel_1, TIM3_CR1_ADDR,
                  RCC_AHBPeriph_DMA1, DMA1_Channel3_BASE, DMA1_Channel3_IRQn,
                  TIM3_PLUSE_DIRECTION_CLASS, TIM3_PLUSE_DIRECTION_PIN,
                  TIM3_PLUSE_HOME_CLASS, TIM3_PLUSE_HOME_PINSOURCE,

@@ -236,6 +236,7 @@ int main(int argc, char* argv[])
 
     //SysTick定时测试。SysTick定时和SysTick延时不能同时使用，会相互干扰
     /*
+     * Sm_SysTick::init();
      * Sm_SysTick::ITConfig(ENABLE);
      * Sm_SysTick::setTimeOut_ms(2, gpioe5toggle);
      * Sm_SysTick::enable();

@@ -1,38 +1,38 @@
-轴1：	脉冲信号：	PA8
-		方向信号：	PA9
-	 	Home信号：	PA10
-		正限位信号：PA11
-		负限位信号：PA12
+轴1:    脉冲信号：	PA8
+        方向信号：	PA9
+        Home信号：	PA10
+        正限位信号：PA11
+        负限位信号：PA12
 
-轴2：	脉冲信号：	PA15
-		方向信号：	PB3
-	 	Home信号：	PB0
-		正限位信号：PC0
-		负限位信号：PC1
+轴2：   脉冲信号：	PA15
+        方向信号：	PB3
+        Home信号：	PB0
+        正限位信号：PC0
+        负限位信号：PC1
 
-轴3：	脉冲信号：	PA6
-		方向信号：	PA7
-	 	Home信号：	PB1
-		正限位信号：PB4
-		负限位信号：PB5
+轴3：   脉冲信号：	PA6
+        方向信号：	PA7
+        Home信号：	PB1
+        正限位信号：PB4
+        负限位信号：PB5
 
-轴4：	脉冲信号：	PB6
-		方向信号：	PB7
-	 	Home信号：	PB2
-		正限位信号：PA13
-		负限位信号：PA14
+轴4：   脉冲信号：	PB6
+        方向信号：	PB7
+        Home信号：	PB2
+        正限位信号：PA13
+        负限位信号：PA14
 
-轴5：	脉冲信号：	PA0
-		方向信号：	PA1
-	 	Home信号：	PA3
-		正限位信号：PA2
-		负限位信号：PA4
+轴5：   脉冲信号：	PA0
+        方向信号：	PA1
+        Home信号：	PA3
+        正限位信号：PA2
+        负限位信号：PA4
 
-轴6：	脉冲信号：	PC6
-		方向信号：	PC7
-	 	Home信号：	PC4
-		正限位信号：PC5
-		负限位信号：PC8
+轴6：   脉冲信号：	PC6
+        方向信号：	PC7
+        Home信号：	PC4
+        正限位信号：PC5
+        负限位信号：PC8
 
 //Flash芯片W25Q128使用SPI2接口：PB3（SPI3_SCK）、PB4（SPI3_MISO）、PB5（SPI3_MOSI）
 预留SPI2作为通信接口：PB12（NSS）、PB13（SPI2_SCK）、PB14（SPI2_MISO）、PB15（SPI2_MOSI）

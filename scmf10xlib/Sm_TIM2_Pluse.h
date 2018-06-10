@@ -30,7 +30,7 @@
 extern Sm::Pluse_t                      TIM2_Pluse;
 
 //脉冲输出：GPIO PA15
-typedef Sm_Pluse<Sm_TIM2_PartialRemap1, Sm::PWM_Channel1, TIM2_CR1_ADDR,
+typedef Sm_Pluse<Sm_TIM2_PartialRemap1, Sm::PWM_Channel_1, TIM2_CR1_ADDR,
         RCC_AHBPeriph_DMA1, DMA1_Channel2_BASE, DMA1_Channel2_IRQn,
         TIM2_PLUSE_DIRECTION_CLASS, TIM2_PLUSE_DIRECTION_PIN,
         TIM2_PLUSE_HOME_CLASS, TIM2_PLUSE_HOME_PINSOURCE,

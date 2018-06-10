@@ -28,7 +28,7 @@
 extern Sm::Pluse_t                      TIM5_Pluse;
 
 //脉冲输出：GPIO PA0
-typedef Sm_Pluse<Sm_TIM5, Sm::PWM_Channel1, TIM5_CR1_ADDR,
+typedef Sm_Pluse<Sm_TIM5, Sm::PWM_Channel_1, TIM5_CR1_ADDR,
         RCC_AHBPeriph_DMA2, DMA2_Channel2_BASE, DMA2_Channel2_IRQn,
         TIM5_PLUSE_DIRECTION_CLASS, TIM5_PLUSE_DIRECTION_PIN,
         TIM5_PLUSE_HOME_CLASS, TIM5_PLUSE_HOME_PINSOURCE,

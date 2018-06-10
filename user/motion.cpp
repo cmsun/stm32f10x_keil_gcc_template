@@ -5,20 +5,27 @@
 #include "Sm_TIM5_Pluse.h"
 #include "Sm_TIM8_Pluse.h"
 #include "Sm_RTC.h"
+#include "Sm_GPIOE.h"
+#include "Sm_USART1.h"
 #include "Sm_Debug.h"
 
 #include "includes.h"
 
 #include "motion.h"
 
+static void createTask(void);
+
 //需要将Sm_TIM1和Sm_TIM8类及它的派生类的全局实例定义在main.cpp中，否则stm32不能正常启动
-static Sm_TIM1_Pluse Pluse1;
-static Sm_TIM2_Pluse Pluse2;
-static Sm_TIM3_Pluse Pluse3;
-static Sm_TIM4_Pluse Pluse4;
-static Sm_TIM5_Pluse Pluse5;
-static Sm_TIM8_Pluse Pluse8;
-static Sm_Pluse_Base *PluseArray[AXIS_QTY] = {&Pluse1, &Pluse2, &Pluse3, &Pluse4, &Pluse5, &Pluse8};
+/*
+ * static Sm_TIM1_Pluse Pluse1;
+ * static Sm_TIM2_Pluse Pluse2;
+ * static Sm_TIM3_Pluse Pluse3;
+ * static Sm_TIM4_Pluse Pluse4;
+ * static Sm_TIM5_Pluse Pluse5;
+ * static Sm_TIM8_Pluse Pluse8;
+ * static Sm_Pluse_Base *PluseArray[AXIS_QTY] = {&Pluse1, &Pluse2, &Pluse3, &Pluse4, &Pluse5, &Pluse8};
+ */
+static Sm_Pluse_Base *PluseArray[6];
 
 OS_TCB PluseMSGTask_TCB;
 CPU_STK PluseMSGTask_STK[PLUSE_TASK_STACK_QTY];
@@ -169,11 +176,17 @@ static void chkeckLimtTask(void *)
 {
     OS_ERR err;
 
+    Sm_GPIOE::init_IO(GPIO_Pin_5); int i = 0;
     while(1)
     {
+        if(i++ == 100)
+        {
+            PEout(5) ^= 1;
+            i = 0;
+        }
         for(int i = 0; i < 6; ++i)
         {
-            PluseArray[i]->limitCheck();
+            //PluseArray[i]->limitCheck();
         }
 
         OSSchedRoundRobinYield(&err);
@@ -181,31 +194,34 @@ static void chkeckLimtTask(void *)
     }
 }
 
-#include "Sm_GPIOE.h"
-#include "diag/Trace.h"
-
 OS_TCB KeyScanTask_TCB;
 //把keyScanTask任务的任务堆栈设置成8字节对齐，就可以在该任务中使用printf()家族函数来格式化浮点数。
 __attribute__ ((aligned(8))) CPU_STK KeyTask_STK[PLUSE_TASK_STACK_QTY];
 
 int64_t ExtPluseCnt = 0; //TIM1外部脉冲计数测试，用来存放接收到的脉冲数
 
-#define AXIS 3
+#define AXIS 1
 
 static void keyScanTask(void *)
 {
     OS_ERR err;
     static uint8_t keyLeft_up = 1, keyRight_up = 1, keyDown_up = 1;
 
+    Sm_GPIOB::init_IO(GPIO_Pin_5); int i = 100;
     while(1)
     {
+		while(i-- == 0)
+		{
+			PBout(5) ^= 1;
+			i = 100;
+		}
+
         if(Sm_GPIOE::readInputDataBit(GPIO_Pin_2) == Bit_RESET && keyLeft_up) //key left
         {
             keyLeft_up = 0;
             Sm_Debug("Key Left\n");
-
+            Sm_Debug("Velocity:%d\n", Sm_GetVel(AXIS));
             Sm_Debug("Position:%d\n", (int32_t)Sm_GetPos(AXIS));
-            // Sm_Debug("Velocity:%d\n", Sm_GetVel(AXIS));
 
             // Sm_Debug("RecPluseCount:%d\n", (int32_t)(ExtPluseCnt + TIM1->CNT));
             // Sm_Debug("RecPluseCount:%d\n", (int32_t)(TIM2->CNT));
@@ -245,6 +261,20 @@ static void keyScanTask(void *)
         OSTimeDly(2, OS_OPT_TIME_PERIODIC, &err);
     }
 }
+
+//第一个任务
+static void start_task(void)
+{
+    OS_ERR err;
+
+    CPU_Init();
+    OS_CPU_SysTickInit(5*72000);                //运行SysTick，5ms调度一次任务
+    OSSchedRoundRobinCfg(DEF_ENABLED, 1, &err); //允许时间片
+
+    createTask();                               //创建其它任务
+
+    OSTaskDel(NULL, &err);                      //删除当前任务
+};
 
 static void createTask(void)
 {
@@ -300,7 +330,15 @@ static void createTask(void)
 
 int main(int argc, char *argv[])
 {
+    (void)argc,(void)argv;
     Sm_Debug("motion running...\n");
+
+    PluseArray[0] = new Sm_TIM1_Pluse;
+    // PluseArray[1] = new Sm_TIM2_Pluse;
+    PluseArray[2] = new Sm_TIM3_Pluse;
+    PluseArray[3] = new Sm_TIM4_Pluse;
+    PluseArray[4] = new Sm_TIM5_Pluse;
+    PluseArray[5] = new Sm_TIM8_Pluse;
 
     //key initialize
     Sm_GPIOE::init_IO(GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4, GPIO_Mode_IPU);
@@ -309,7 +347,7 @@ int main(int argc, char *argv[])
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
     Sm_SetPosmode(AXIS);
-    // Sm_forwarDirectionCoonfig(AXIS, Bit_RESET);
+    Sm_forwarDirectionCoonfig(AXIS, Bit_RESET);
     Sm_SetPosmodePrm(AXIS, 0.5, 0.5, 1000);
     Sm_SetVel(AXIS, 150000);
 
@@ -318,20 +356,6 @@ int main(int argc, char *argv[])
      * Sm_SetVelmodePrm(AXIS, 0.25F, 0.25F, 1000);
      * Sm_SetVel(AXIS, 1000);
      */
-
-    //第一个任务
-    auto start_task = [&](void *)
-    {
-        OS_ERR err;
-
-        CPU_Init();
-        OS_CPU_SysTickInit(5*72000);                //运行SysTick，5ms调度一次任务
-        OSSchedRoundRobinCfg(DEF_ENABLED, 1, &err); //允许时间片
-
-        createTask();                               //创建其它任务
-
-        OSTaskDel(NULL, &err);                      //删除当前任务
-    };
 
     OS_ERR err;
     OSInit(&err);
@@ -355,7 +379,7 @@ int main(int argc, char *argv[])
 
     while(1)    
     {
-
+        //never reach here.
     }
 
     return 0;

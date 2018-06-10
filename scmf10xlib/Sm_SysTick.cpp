@@ -1,11 +1,9 @@
 #include "Sm_SysTick.h"
 
-// SysTick时钟默认是系统时钟的8分频
-uint32_t Sm_SysTick::mFac_ms = SystemCoreClock / 8 / 1000;
-uint32_t Sm_SysTick::mFac_us = SystemCoreClock / 8 / 1000000;
-uint32_t Sm_SysTick::mMax_ms = 0xffffff / mFac_ms;
-uint32_t Sm_SysTick::mMax_us = 0xffffff / mFac_us;
-
+uint32_t Sm_SysTick::mFace_us;
+uint32_t Sm_SysTick::mFace_ms;
+uint32_t Sm_SysTick::mMax_us;
+uint32_t Sm_SysTick::mMax_ms;
 Sm::CALLBACK SysTickCallback;
 
 #if !defined(Sm_UCOS_Support)
@@ -15,6 +13,34 @@ extern "C" void SysTick_Handler(void)
         SysTickCallback.pfun(SysTickCallback.arg);
 }
 #endif
+
+/*
+********************************************************************************
+*                               init
+* Description : 初始化计算face和max
+* 
+* Arguments   : face_ms：当前SysTick时钟源下延时1ms需要的计数值
+*               face_us：当前SysTick时钟源下延时1us需要的计数值
+*               max_ms: 当前SysTick时钟源下一次加载能延时的最大毫秒数
+*               max_us: 当前SysTick时钟源下一次加载能延时的最大微秒数
+*               
+* Return      : none
+* 
+* Note(s)     : none
+********************************************************************************
+*/
+void Sm_SysTick::init(void)
+{
+    RCC_ClocksTypeDef rcc_clocks;
+
+    SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);    //设置成不分频，则SysTick定时器的时钟频率等于HCLK
+
+    RCC_GetClocksFreq(&rcc_clocks);
+    mFace_ms = rcc_clocks.HCLK_Frequency / 1000;         //systick延时1毫秒所需要的计数值
+    mFace_us = rcc_clocks.HCLK_Frequency / 1000000;      //systick延时1微秒所需要的计数值
+    mMax_ms = 0xffffff / mFace_ms;                       //一次加载最大能延时的毫秒数
+    mMax_us = 0xffffff / mFace_us;                       //一次加载最大能延时的微秒数
+}
 
 /*
 ********************************************************************************
@@ -34,16 +60,19 @@ void Sm_SysTick::setCLKSource(uint32_t SysTick_CLKSource)
 {
     Sm_assert(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
 
+    RCC_ClocksTypeDef rcc_clocks;
+
     SysTick_CLKSourceConfig(SysTick_CLKSource); 
 
+    RCC_GetClocksFreq(&rcc_clocks);
     if(SysTick_CLKSource == SysTick_CLKSource_HCLK)
-        mFac_us = SystemCoreClock / 1000000;
+        mFace_us = rcc_clocks.HCLK_Frequency / 1000000;
     else
-        mFac_us = SystemCoreClock / 8 / 1000000;
+        mFace_us = rcc_clocks.HCLK_Frequency / 8 / 1000000;
 
-    mFac_ms = mFac_us * 1000;
-    mMax_us = 0xffffff / mFac_us;
-    mMax_ms = 0xffffff / mFac_ms;
+    mFace_ms = mFace_us * 1000;
+    mMax_us = 0xffffff / mFace_us;
+    mMax_ms = 0xffffff / mFace_ms;
 }
 
 /*
@@ -56,9 +85,13 @@ void Sm_SysTick::setCLKSource(uint32_t SysTick_CLKSource)
 *
 * Returns     : none
 *
-* Note(s)     : SysTick->LOAD为24位寄存器,所以,最大延时为:nms*mFac_ms <= 0xffffff
-*               对72M条件下不分频时mFac_ms==72000，所以nms<=233
-*               对72M条件下8分频时mFac_ms==9000，所以nms<=1864
+* Note(s)     : SysTick->LOAD为24位寄存器,所以,最大延时为:nms*mFace_ms <= 0xffffff
+*               对48M条件下不分频时mFace_ms==48000，所以nms<=349
+*               对48M条件下8分频时mFace_ms==6000，所以nms<=2796
+*               对72M条件下不分频时mFace_ms==72000，所以nms<=233
+*               对72M条件下8分频时mFace_ms==9000，所以nms<=1864
+*               对168M条件下不分频时face_ms==168000，所以nms<=99
+*               对168M条件下8分频时face_ms==21000，所以nms<=792
 ********************************************************************************
 */
 void Sm_SysTick::delay_ms_private(uint16_t nms)
@@ -66,7 +99,7 @@ void Sm_SysTick::delay_ms_private(uint16_t nms)
     Sm_assert(nms <= mMax_ms);
 
     uint32_t temp;
-    SysTick->LOAD = nms * mFac_ms - 1;           //加载时间
+    SysTick->LOAD = nms * mFace_ms - 1;           //加载时间
     SysTick->VAL = 0x00;                        //清空计数器
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;   //开始计数
     do{
@@ -88,16 +121,20 @@ void Sm_SysTick::delay_ms_private(uint16_t nms)
 *
 * Returns     : none
 *
-* Note(s)     : SysTick->LOAD为24位寄存器，所以最大定时为：nms*mFac_ms <= 0xffffff
-*               对72M条件下不分频时mFac_ms==72000，所以nms<=233
-*               对72M条件下8分频时mFac_ms==9000，所以nms<=1864
+* Note(s)     : SysTick->LOAD为24位寄存器，所以最大定时为：nms*mFace_ms <= 0xffffff
+*               对48M条件下不分频时mFac_ms==48000，所以nms<=349
+*               对48M条件下8分频时mFac_ms==6000，所以nms<=2796
+*               对72M条件下不分频时mFace_ms==72000，所以nms<=233
+*               对72M条件下8分频时mFace_ms==9000，所以nms<=1864
+*               对168M条件下不分频时face_ms==168000，所以nms<=99
+*               对168M条件下8分频时face_ms==21000，所以nms<=792
 ********************************************************************************
 */
 void Sm_SysTick::setTimeOut_ms(uint16_t nms, void (*pfun)(void *), void *arg)
 {
     Sm_assert(nms <= mMax_ms);
 
-    SysTick->LOAD = mFac_ms * nms - 1;
+    SysTick->LOAD = mFace_ms * nms - 1;
     SysTickCallback.pfun = pfun;
     SysTickCallback.arg = arg;
 
@@ -116,16 +153,20 @@ void Sm_SysTick::setTimeOut_ms(uint16_t nms, void (*pfun)(void *), void *arg)
 *
 * Returns     : none
 *
-* Note(s)     : SysTick->LOAD为24位寄存器，所以最大定时为：nus*mFac_us <= 0xffffff
-*               对72M条件下不分频时mFac_us==72,所以nus<=233016
-*               对72M条件下8分步时mFac_us==9,所以nus<=1864135
+* Note(s)     : SysTick->LOAD为24位寄存器，所以最大定时为：nus*mFace_us <= 0xffffff
+*               对48M条件下不分频时mFac_us==48，所以nus<=349525
+*               对48M条件下8分频时mFac_us==6，所以nus<=2796202
+*               对72M条件下不分频时mFace_us==72,所以nus<=233016
+*               对72M条件下8分步时mFace_us==9,所以nus<=1864135
+*               对168M条件下不分频时face_us==168,所以nus<=99864
+*               对168M条件下8分步时face_us==21,所以nus<=798915
 ********************************************************************************
 */
 void Sm_SysTick::setTimeOut_us(uint16_t nus, void (*pfun)(void *), void *arg)
 {
     Sm_assert(nus <= mMax_us);
 
-    SysTick->LOAD = mFac_us * nus - 1;
+    SysTick->LOAD = mFace_us * nus - 1;
     SysTickCallback.pfun = pfun;
     SysTickCallback.arg = arg;
 
@@ -168,9 +209,13 @@ void Sm_SysTick::delay_ms(uint32_t nms)
 *
 * Returns     : none
 *
-* Note(s)     : SysTick->LOAD为24位寄存器，所以最大延时为：nus*mFac_us <= 0xffffff
-*               对72M条件下不分频时mFac_us==72,所以nus<=233016
-*               对72M条件下8分步时mFac_us==9,所以nus<=1864135
+* Note(s)     : SysTick->LOAD为24位寄存器，所以最大延时为：nus*mFace_us <= 0xffffff
+*               对48M条件下不分频时mFac_us==48，所以nus<=349525
+*               对48M条件下8分频时mFac_us==6，所以nus<=2796202
+*               对72M条件下不分频时mFace_us==72,所以nus<=233016
+*               对72M条件下8分步时mFace_us==9,所以nus<=1864135
+*               对168M条件下不分频时face_us==168,所以nus<=99864
+*               对168M条件下8分步时face_us==21,所以nus<=798915
 ********************************************************************************
 */
 void Sm_SysTick::delay_us(uint32_t nus)
@@ -178,7 +223,7 @@ void Sm_SysTick::delay_us(uint32_t nus)
     Sm_assert(nus <= mMax_us);
 
     uint32_t temp;
-    SysTick->LOAD = nus * mFac_us - 1;           //加载时间
+    SysTick->LOAD = nus * mFace_us - 1;           //加载时间
     SysTick->VAL = 0x00;                        //清空计数器
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;   //开始计数
     do{
@@ -242,8 +287,8 @@ void Sm_SysTick::setReload(uint32_t reloadVal)
 *
 * Note(s)     : 此函数可以用来计算某些代码块的运行时间。使用方法是setReload(0),
 *               然后调用enable()开始计时，用value()读出计数值。如果SysTick时钟源
-*               不分频，则value()/72为代码块执行的us数。如果8分频则value()/9为代
-*               码块执行的us数。
+*               不分频，则value()/HCLK/1000000为代码块执行的us数。如果8分频则
+*               value()/HCLK/8/1000000为代码块执行的us数。
 ********************************************************************************
 */
 uint32_t Sm_SysTick::value(void)
@@ -290,7 +335,7 @@ void Sm_SysTick::disable(void)
 
 /*
 ********************************************************************************
-*                               fac_us 
+*                               face_us 
 *
 * Description : 获取当前SysTick时钟分频下定时1us的计数值
 *
@@ -301,14 +346,14 @@ void Sm_SysTick::disable(void)
 * Note(s)     : none
 ********************************************************************************
 */
-uint32_t Sm_SysTick::fac_us(void)
+uint32_t Sm_SysTick::face_us(void)
 {
-    return mFac_us;
+    return mFace_us;
 }
 
 /*
 ********************************************************************************
-*                               fac_ms 
+*                               face_ms 
 *
 * Description : 获取当前SysTick时钟分频下定时1ms的计数值
 *
@@ -319,7 +364,7 @@ uint32_t Sm_SysTick::fac_us(void)
 * Note(s)     : none
 ********************************************************************************
 */
-uint32_t Sm_SysTick::fac_ms(void)
+uint32_t Sm_SysTick::face_ms(void)
 {
-    return mFac_ms;
+    return mFace_ms;
 }

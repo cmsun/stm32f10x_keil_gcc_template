@@ -8,7 +8,7 @@
 #include "Sm_TIM.h"
 
 //DMA脉冲计数数的最大值
-#define SM_PLUSE_DMA_BUFFER 60000
+#define SM_PLUSE_DMA_BUFFER 1000
 
 //默认起动速度100Hz/s
 #define SM_STARTUP_SPEED 100
@@ -26,7 +26,7 @@
 #define SM_COMPUTE_STEP 250
 
 //任务堆栈大小
-#define PLUSE_TASK_STACK_QTY  128
+#define PLUSE_TASK_STACK_QTY  256
 
 namespace Sm
 {
@@ -94,8 +94,8 @@ namespace Sm
 class Sm_Pluse_Base
 {
 public:
-    Sm_Pluse_Base() = default;
-    virtual ~Sm_Pluse_Base() = default;
+    Sm_Pluse_Base(){};
+    virtual ~Sm_Pluse_Base(){};
     virtual int setMode(Sm::enPluseMode) = 0;
     virtual int setVelmodePrm(float, float, uint32_t) = 0;
     virtual int setPosmodePrm(float, float, uint32_t) = 0;
@@ -109,7 +109,7 @@ public:
     virtual void limitCheck(void) = 0;
 };
 
-template<typename Sm_TIMx, Sm::PWM_Chl channel, uint32_t DMA_PeripheralBaseAddr,
+template<typename Sm_TIMx, Sm::PWM_Channel channel, uint32_t DMA_PeripheralBaseAddr,
     uint32_t RCC_AHBPeriph_DMAx, uint32_t DMAx_Channely, IRQn_Type DMAx_Channely_IRQn,
     typename Sm_GPIO_Direction, uint16_t GPIO_Pin_Direction,            //方向信号
     typename Sm_GPIO_Home, uint8_t GPIO_PintSource_Home,                          //原点信号(中断源)

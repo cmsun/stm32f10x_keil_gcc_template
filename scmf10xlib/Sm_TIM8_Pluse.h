@@ -28,7 +28,7 @@
 extern Sm::Pluse_t                      TIM8_Pluse;
 
 //脉冲输出：GPIO PC6
-typedef Sm_Pluse<Sm_TIM8, Sm::PWM_Channel1, TIM8_CR1_ADDR,
+typedef Sm_Pluse<Sm_TIM8, Sm::PWM_Channel_1, TIM8_CR1_ADDR,
         RCC_AHBPeriph_DMA2, DMA2_Channel1_BASE, DMA2_Channel1_IRQn,
         TIM8_PLUSE_DIRECTION_CLASS, TIM8_PLUSE_DIRECTION_PIN,
         TIM8_PLUSE_HOME_CLASS, TIM8_PLUSE_HOME_PINSOURCE,

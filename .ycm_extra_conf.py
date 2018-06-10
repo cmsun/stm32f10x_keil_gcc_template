@@ -30,19 +30,25 @@ flags = [
     '-Wfloat-equal', 
 
     '-x', 'c++',
-    '-std=c++11',
+    '-std=c++99',
 
     '-isystem', r'C:\Keil_v5\ARM\ARMCC\include',
     '-isystem', r'C:\Keil_v5\ARM\ARMCC\include\rw',
 
     '-I', r'.',
-    '-I', r'scmf10xlib',
-    '-I', r'cmsis',
-    '-I', r'cmsis/startup',
-    '-I', r'StdPeriphDriver/v3.5/inc',
-    '-I', r'StdPeriphDriver/v3.5/src',
-    '-I', r'utilities',
-    '-I', r'user',
+    '-I', r'./cmsis/GNU/',
+    '-I', r'./newlib',
+    '-I', r'./scmf10xlib',
+    '-I', r'./StdPeriphDriver/v3.5/inc',
+    '-I', r'./StdPeriphDriver/v3.5/src',
+    '-I', r'./user',
+
+    '-I', r'../ucosiii_lib/UCOSIII/uCOS-III',
+    '-I', r'../ucosiii_lib/UCOSIII/uC-LIB',
+    '-I', r'../ucosiii_lib/UCOSIII/uC-CPU',
+    '-I', r'../ucosiii_lib/UCOSIII/Boards/STM32F103/RealView/BSP',
+    '-I', r'../ucosiii_lib/UCOSIII/Boards/STM32F103/RealView/Cfg',
+    '-I', r'../ucosiii_lib/UCOSIII/Boards/STM32F103/RealView/Ports',
 
     '-DDEBUG',
     '-DSTM32F10X_HD',
